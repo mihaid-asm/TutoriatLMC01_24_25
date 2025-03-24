@@ -1,0 +1,69 @@
+ex1:
+Definit¸i un predicat distance/3 pentru a calcula distant¸a dintre dou˘a
+puncte din plan. Punctele sunt date ca perechi de coordonate.
+
+distance((A,B),(C,D),X) :- X is sqrt((C-A)**2 + (D-B)**2).
+
+ex2:
+Scriet¸i un predicat fib/2 pentru a calcula, pentru orice n, num˘arul de pe
+pozit¸ia n din ¸sirul Fibonacci. Secvent¸a de numere Fibonacci este definit˘a
+prin: F0 := 1, F1 := 1, iar, pentru orice n ≥ 2,
+
+fib(0,1).
+fib(1,1).
+fib(N,X) :- 2 =< N, M is N - 1, fib(M, Y), P is N - 2, fib(P, Z), X is Y + Z.
+
+fibo(0,0,1).
+fibo(1,1,1).
+fibo(N,Z,X) :- 2 =< N, M is N-1, fibo(M,Y,Z), X is Y + Z.
+
+fibg(N,X) :- fibo(N,_,X).
+
+ex3:
+
+Scriet¸i un program ˆın Prolog pentru a afi¸sa un p˘atrat de n × n caractere
+pe ecran.
+Denumit¸i predicatul square/2. Primul argument este un num˘ar natural
+diferit de 0, iar al doilea un caracter care trebuie afi¸sat.
+
+
+line(0,_).
+line(X,C):- X>0, Y is X-1, write(C), line(Y,C).
+
+rectangle(0,_,_):-nl.
+rectangle(X,Z,C):- X>0, Y is X-1, line(Z,C), nl, rectangle(Y,Z,C).
+square(X,C) :- rectangle(X,X,C).
+
+ex4:
+ Definit¸i un predicat all a/1 care prime¸ste ca argument o list˘a ¸si care
+verific˘a dac˘a argumentul s˘au este format doar din a-uri.
+
+all_a([]).
+all_a([a|X]):-all_a(X).
+
+Scrieti un predicat trans a b/2 care traduce o list˘a de a-uri ˆıntr-o
+list˘a de b-uri. trans a b(X,Y) trebuie s˘a fie adev˘arat dac˘a X este o list˘a
+de a-uri ¸si Y este o list˘a de b-uri, iar cele dou˘a liste au lungimi egale.
+trans_a_b([],[]).
+trans_a_b([a|X],[b|Y]):-trans_a_b(X,Y).
+
+ex5:
+Scriet¸i un predicat scalarMult/3, al c˘arui prim argument este un
+ˆıntreg, al doilea argument este o list˘a de ˆıntregi, iar al treilea argument
+este rezultatul ˆınmult¸irii cu scalari al celui de-al doilea argument cu
+primul.
+
+scalarMult(_,[],[]).
+scalarMult(N,[H|T],[X|Y]) :- X is N * H, scalarMult(N,T,Y).
+
+Scriet¸i un predicat dot/3 al c˘arui prim argument este o list˘a de
+ˆıntregi, al doilea argument este o list˘a de ˆıntregi de lungimea primeia, iar
+al treilea argument este produsul scalar dintre primele dou˘a argumente.
+dot([],[],0).
+dot([H|T],[X|Y],M) :- dot(T,Y,N), M is N + H * X.
+
+C) Scriet¸i un predicat max/2 care caut˘a elementul maxim ˆıntr-o list˘a de
+numere naturale
+max([],0).
+max([H|T],Y) :- max(T,Y), Y >= H.
+max([H|T],H) :- max(T,Y), H > Y.

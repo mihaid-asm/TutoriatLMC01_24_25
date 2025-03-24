@@ -1,0 +1,53 @@
+%Apartenenta unui element la o lista
+apartine(X, [X|_]).
+apartine(X, [_|T]) :- apartine(X, T).
+
+
+% lungimea unei liste
+len([],0).
+len([_|T], CNT):- len(T,CN), CNT is CN + 1. 
+
+
+% Verifica daca toate elementele unei liste sunt la fel
+all([],_).
+all([C|T], C) :- all(T,C).
+
+
+% Factorial
+fac(0,1).
+fac(Element, Produs) :- N is Element - 1, fac(N, Aux), 
+    					Produs is Element*Aux.
+
+% Numerele pare dintr-o lista 
+even(List, X) :- findall(Y, (member(Y, List), 0 is Y mod 2), X).
+
+par([],[]).
+par([H|T], [H|B]) :- par(T,B), 0 is H mod 2.
+par([_|T], B) :- par(T,B).
+
+% Numerele impare pana la N(valoare data)
+impare_pana_la(List, N) :- findall(Y, (between(1, N, Y), 1 is Y mod 2), List).
+
+% Inversarea unei liste
+rev([],[]).
+rev([H|T],L) :- rev(T, N), append(N, [H], L).
+
+% MODEL EXAMEN LABORATOR
+%EX1
+lista_puncte([],_,[]).
+lista_puncte([punct(X,Y)|T1], Val, [punct(X,Y)|Lrez]):- Y>Val, lista_puncte(T1, Val, Lrez).
+lista_puncte([punct(_,Y)|T1], Val, Lrez):- Y=<Val, lista_puncte(T1, Val, Lrez).
+
+%EX2
+dropN(L, R, N) :- append(R, L1, L), length(L1, N).
+
+%EX3
+rmdn(Phi, Phi) :- atom(Phi).
+rmdn(non(Phi), non(Phi)) :- atom(Phi).
+rmdn(non(non(Phi)), Psi) :- rmdn(Phi, Psi).
+rmdn(non(si(Phi,Psi)),non(A)) :- rmdn(si(Phi,Psi),A).
+rmdn(non(sau(Phi,Psi)),non(A)) :- rmdn(sau(Phi,Psi),A).
+rmdn(non(imp(Phi,Psi)),non(A)) :- rmdn(imp(Phi,Psi),A).
+rmdn(si(Phi, Psi), si(Phi1, Psi1)) :- rmdn(Phi, Phi1), rmdn(Psi, Psi1).
+rmdn(sau(Phi, Psi), sau(Phi1, Psi1)) :- rmdn(Phi, Phi1), rmdn(Psi, Psi1).
+rmdn(imp(Phi, Psi), imp(Phi1, Psi1)) :- rmdn(Phi, Phi1), rmdn(Psi, Psi1).
