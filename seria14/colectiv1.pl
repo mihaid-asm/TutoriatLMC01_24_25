@@ -6,11 +6,20 @@
 boolTable([]).
 boolTable([H|T]) :- member(H,[false,true]), boolTable(T).
 
-implica(P,Q) :- not(P);Q.
+implica(P,Q) :- not(P);Q. % P = fals sau Q = true
+
+
 echiv(P,Q) :- implica(P,Q), implica(Q,P).
+
+
 implDif(P,Q) :- implica(P,Q), not(implica(Q,P)).
-dif(P,Q) :- P, not(Q).
+
+
+
+dif(P,Q) :- P, not(Q). % P \ Q
 xor(P,Q) :- P, not(Q) ; Q, not(P).
+
+
 symDif(P,Q) :- xor(P,Q);
 
 
@@ -128,6 +137,26 @@ ms3_5([A]) :- symDif(A, false).
 md3_5([A]) :- A.
 dem3_5 :- demGeneral(1, ms3_5, md3_5).
 
+%4. A ∪ B = ∅ ⇔ A = B = ∅, A \ B = ∅ ⇔ A ⊆ B, A∆B = ∅ ⇔ A = B
+
+ms4([A,B]) :- A;B.
+md4([_,_]) :- false.
+ms4_1([A, B]) :- echiv(ms4([A, B]), md4([A, B])).
+ms4_2([A, B]) :- A = false, B = false.
+de4_1 :- demGeneral(2, ms4_1, ms4_2). 
+
+ms4_1_1([A, B]) :- dif(A, B).
+md4_1_1([_, _]) :- false.
+
+ms4_1_2([A, B]) :- echiv(dif(A, B), false).
+
+md4_1_2([A, B]) :- implica(A, B).
+
+dem4_2 :- demGeneral(2, ms4_1_2, md4_1_2).
+
+ms4_1_3([A, B]) :- echiv(xor(A, B), false).
+md4_1_3([A, B]) :- echiv(A, B).
+dem4_3 :- demGeneral(2, md4_1_3, ms4_1_3).
 
 % 5. A ⊂ B ddaca (A ⊆ B ∩ B ⊂ A) ddaca (A ⊆ B ∩ B \ A != Ø)
 
@@ -142,3 +171,19 @@ dem5_2 :- demGeneral(2,ms5,mt5).
 tRUE(_).
 ms0([A]) :- implica(A,not(A)).
 dem0 :- demGeneral(1, ms0, tRUE).
+
+
+%6 A ⊆ B ⇔ (A ( B sau A = B)
+ms6([A,B]) :- implica(A,B).
+md6([A,B]) :- implDif(A,B) ; echiv(A,B). % A = B
+dem6 :- demGeneral(2,ms6,md6).
+
+%7. A ( B ⊆ C ⇒ A ( C, A ⊆ B ( C ⇒ A ( C, A ( B ( C ⇒ A ( C
+ms7_1([A, B, C]) :- implDif(A, B), implica(B,C).
+md7_1([A, _, C]) :- implDif(A, C).
+dem7_1 :- demGeneral(3, ms7_1, md7_1).
+
+% 729. A∆B = (A ∪ B) \ (A ∩ B)
+msX([A,B]) :- xor(A,B).
+mdX([A,B]) :- dif((A;B),(A,B)).
+demX :- demGeneral(2,msX,mdX).
