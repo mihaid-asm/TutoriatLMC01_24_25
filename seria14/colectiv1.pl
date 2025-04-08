@@ -1,5 +1,6 @@
 %%% OBS! Daca nu sunteti pe Swi-Prolog downloadat nu o sa mearga corect comenzile.
 %%% acest lucru se intampla pt ca varianta online SWISH are feature-uri oprite (pt safety).
+%%% In varianta online, demonstratiile vor da eroarea "sandbox restricted", insemnand ca nu poti evalua direct A.
 
 
 %%% definitii de baza:
@@ -92,6 +93,11 @@ generate_vars(N, [_|Rest]) :-
 demGeneral(N,S,D) :- generate_vars(N,X),
    not(( boolTable(X), write(X), nl,not(echiv(call(S,X),call(D,X))))).
 
+% 0. exemplu pe care da false.
+tRUE(_).
+ms0([A]) :- implica(A,not(A)).
+dem0 :- demGeneral(1, ms0, tRUE).
+
 
 % 1. A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)
 
@@ -115,7 +121,9 @@ dem2_1 :- demGeneral(2,ms2,md2).
 mt2([A,B]) :- echiv( (A,B), A).
 dem2 :- dem2_1, demGeneral(2, ms2, mt2).
 
-% 3. A ∪ Ø = A. A ∩ Ø = Ø, A \ Ø = A. Ø \ A = Ø. A Δ Ø = A.
+% 3. A ∪ Ø = A, A ∩ Ø = Ø, 
+% A \ Ø = A, Ø \ A = Ø, 
+% A Δ Ø = A
 
 ms3_1([A]) :- (A;false).
 md3_1([A]) :- A.
@@ -137,7 +145,9 @@ ms3_5([A]) :- symDif(A, false).
 md3_5([A]) :- A.
 dem3_5 :- demGeneral(1, ms3_5, md3_5).
 
-%4. A ∪ B = ∅ ⇔ A = B = ∅, A \ B = ∅ ⇔ A ⊆ B, A∆B = ∅ ⇔ A = B
+% 4. A ∪ B = ∅ ⇔ A = B = ∅, 
+% A \ B = ∅ ⇔ A ⊆ B, 
+% A∆B = ∅ ⇔ A = B
 
 ms4([A,B]) :- A;B.
 md4([_,_]) :- false.
@@ -158,7 +168,7 @@ ms4_1_3([A, B]) :- echiv(xor(A, B), false).
 md4_1_3([A, B]) :- echiv(A, B).
 dem4_3 :- demGeneral(2, md4_1_3, ms4_1_3).
 
-% 5. A ⊂ B ddaca (A ⊆ B ∩ B ⊂ A) ddaca (A ⊆ B ∩ B \ A != Ø)
+% 5. A ⊊ B ddaca (A ⊆ B si B ⊊ A) ddaca (A ⊆ B si B \ A != Ø)
 
 ms5([A,B]) :- implDif(A,B).
 md5([A,B]) :- implica(A,B), not(implica(B,A)).
@@ -167,23 +177,55 @@ mt5([A,B]) :- implica(A,B), dif(B,A).
 dem5_1 :- demGeneral(2,ms5,md5).
 dem5_2 :- demGeneral(2,ms5,mt5).
 
-% 6.
-tRUE(_).
-ms0([A]) :- implica(A,not(A)).
-dem0 :- demGeneral(1, ms0, tRUE).
-
-
-%6 A ⊆ B ⇔ (A ( B sau A = B)
+% 6. A ⊆ B ⇔ (A ⊊ B sau A = B)
 ms6([A,B]) :- implica(A,B).
 md6([A,B]) :- implDif(A,B) ; echiv(A,B). % A = B
 dem6 :- demGeneral(2,ms6,md6).
 
-%7. A ( B ⊆ C ⇒ A ( C, A ⊆ B ( C ⇒ A ( C, A ( B ( C ⇒ A ( C
+% 7. A ⊊ B ⊆ C ⇒ A ⊊ C,  
+% A ⊆ B ⊊ C ⇒ A ⊊ C,  
+% A ⊊ B ⊊ C ⇒ A ⊊ C
+
 ms7_1([A, B, C]) :- implDif(A, B), implica(B,C).
 md7_1([A, _, C]) :- implDif(A, C).
 dem7_1 :- demGeneral(3, ms7_1, md7_1).
+% DE TERMINAT! (dem7_1 e gresit)
 
-% 729. A∆B = (A ∪ B) \ (A ∩ B)
-msX([A,B]) :- xor(A,B).
+
+% 8. A ⊆ B ⇒ A ∪ C ⊆ B ∪ C, 
+% A ⊆ B ⇒ A \ C ⊆ B \ C, 
+% A ⊆ B ⇒ C \ B ⊆ C \ A
+
+
+
+% 9. (A ⊆ B si C ⊆ D) ⇒ 
+% (A ∪ C ⊆ B ∪ D, A ∩ C ⊆ B ∩ D si A \ D ⊆ B \ C)
+
+
+
+% 10. A \ B ⊆ A, 
+% A ∩ (A \ B) = A \ B, 
+% A ∩ (B \ A) = ∅
+
+
+
+% 11. A ∩ B = ∅ ⇔ A \ B = A ⇔ B \ A = B
+
+
+
+% OBS! T este multimea "parinte" (A ⊆ T, B ⊆ T). Ā = T\A = complementul.
+% 12. A ⊆ B ⇔ B̄ ⊆ Ā, 
+% A = B ⇔ Ā = B̄, 
+% A ⊊ B ⇔ B̄ ⊊ Ā
+
+
+% OBS! T este multimea "parinte" (A ⊆ T, B ⊆ T). Ā = T\A = complementul.
+% 13. A ∩ B = ∅ ⇔ A ⊆ B̄ ⇔ B ⊆ Ā, 
+% A ∪ B = T ⇔ A ⊇ B̄ ⇔ B ⊇ Ā.
+
+
+
+% 14. A∆B = (A ∪ B) \ (A ∩ B)
+msX([A,B]) :- symDif(A,B).
 mdX([A,B]) :- dif((A;B),(A,B)).
 demX :- demGeneral(2,msX,mdX).
