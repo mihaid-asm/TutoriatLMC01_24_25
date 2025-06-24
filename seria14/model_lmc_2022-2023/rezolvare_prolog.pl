@@ -37,3 +37,16 @@ verifAsatepsilon :- multimeaA(A), detR(R), detK(K), detf(F),
         not(implica(
             (  member((X,K), F), member((K,Y), F), member((K,Y), R)  ), member((X,Y),R))))).
 
+% Exercitiul 4:
+
+
+fctL2xL2xL2laL3(ListaMorfLatMarg) :- cub(Cub, OrdCub), l3(L3, OrdL3), setof(F, (morflatmarg(F,Cub,OrdCub, L3,OrdL3)), ListaMorfLatMarg).
+
+niciunasurj :- not( (fctL2xL2xL2laL3(ListaMorfLatMarg), l3(L3,_), not(not(surjectiv(ListaMorfLatMarg, L3))))).
+
+
+% functii random: 
+prettyPrint(Lista) :- write("["), prettyPrintAux(0,20,Lista), write("]"), nl.
+prettyPrintAux(N, Nmax, L) :- N >= Nmax, !, nl, prettyPrintAux(0,Nmax,L). 
+prettyPrintAux(N, Nmax, [H|T]) :- N < Nmax, N1 is N + 1, write(H), write(", "), prettyPrintAux(N1,Nmax,T). 
+prettyPrintAux(_, _, []).
