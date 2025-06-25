@@ -40,7 +40,8 @@ verifAsatepsilon :- multimeaA(A), detR(R), detK(K), detf(F),
 % Exercitiul 4:
 
 
-fctL2xL2xL2laL3(ListaMorfLatMarg) :- cub(Cub, OrdCub), l3(L3, OrdL3), setof(F, (morflatmarg(F,Cub,OrdCub, L3,OrdL3)), ListaMorfLatMarg).
+fctL2xL2xL2laL3(ListaMorfLatMarg) :- cub(Cub, OrdCub), l3(L3, OrdL3), 
+    setof(F, (morflatmarg(F,Cub,OrdCub, L3,OrdL3)), ListaMorfLatMarg).
 
 niciunasurj :- not( (fctL2xL2xL2laL3(ListaMorfLatMarg), l3(L3,_), not(not(surjectiv(ListaMorfLatMarg, L3))))).
 
