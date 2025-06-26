@@ -116,7 +116,7 @@ injectiv(R) :- not((member((U,Y),R), member((X,Y),R), U\=X)).
 surj(R,A,B) :- not((member(Y,B), not((member(X,A), member((X,Y),R))))).
 surjectiv(R,B) :- not((member(Y,B), not(member((_,Y),R)))).
 
-functiebij(F,A,B) :- functie(F,A,B), inj(F,B), surj(F,A,B).
+functiebijectiv(F,A,B) :- functie(F,A,B), inj(F,B), surj(F,A,B).
 
 % Predicat care testeaza daca o lista nu are duplicate:
 faradupl([]).

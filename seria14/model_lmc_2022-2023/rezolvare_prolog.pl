@@ -51,3 +51,52 @@ prettyPrint(Lista) :- write("["), prettyPrintAux(0,20,Lista), write("]"), nl.
 prettyPrintAux(N, Nmax, L) :- N >= Nmax, !, nl, prettyPrintAux(0,Nmax,L). 
 prettyPrintAux(N, Nmax, [H|T]) :- N < Nmax, N1 is N + 1, write(H), write(", "), prettyPrintAux(N1,Nmax,T). 
 prettyPrintAux(_, _, []).
+
+
+
+% Pregatire examen:
+
+% Ex 1
+
+l2xl3(A,Ord) :- A = [0,1,a,b,c,d], orddinsucc([(0,a),(0,b),(a,c),(b,c),(b,d),(c,1),(d,1)],A,Ord).
+
+l2+l2xl2(A,Ord) :- A = [0,1,u,x,y], orddinsucc([(0,u),(u,x),(u,y),(x,1),(y,1)],A,Ord).
+
+% fctstrcresc(F,P,OrdP,Q,OrdQ).  
+
+fctL2xL3laL2plusL2xL2(Rez) :- l2xl3(A,Ord), l2+l2xl2(B,Ord2), invrel(Ord2, InvOrd2), fctstrcresc(Rez, A, Ord, B, InvOrd2).
+
+niciunainj :- not((fctL2xL3laL2plusL2xL2(Rez), injectiv(Rez))). 
+% ca sa dem ca nicio functie nu e injectiva, putem
+% demonstra ca nu exista functie care sa fie injectiva.
+
+% Ex 2:
+
+l2_ipoteza1(Alfa, Beta, Gama) :- (Alfa ; implica(Beta,Gama)).
+
+l2_ipoteza2(Alfa, Gama) :- implica(Gama,Alfa).
+
+l2_concluzia(Alfa, Beta) :- implica(Beta,Alfa).
+
+regded :- not( (listaBool( [Alfa,Beta,Gama] ), l2_ipoteza1(Alfa, Beta, Gama),l2_ipoteza2(Alfa, Gama), not(l2_concluzia(Alfa, Beta))) ).
+% nu exista nicio evaluare , in care concluzia e falsa (date fiind ipotezele). 
+
+% Ex 3:
+
+l2_multA([a,b,c,d]).
+
+l2_ordinea(Ord) :- l2_multA(A), orddinsucc([(a,b), (b,d)], A, Ord).
+
+l2_posetA(A,Ord) :- l2_ordinea(Ord), l2_multA(A).
+
+dual(Ord, DualOrd) :- invrel(Ord, DualOrd).
+
+l2_getf(F) :- l2_posetA(A,Ord), dual(Ord,OrdDual), 
+    fctcresc(F, A, Ord, A, OrdDual), functiebijectiv(F, A, A). % izomorfism de poseturi = fct crescatoare (numita si morfism), si bijectiva
+    
+l2_getr(R) :- l2_ordinea(Ord), dual(Ord,R).
+
+l2_verifAsatepsilon :- l2_multA(AAA), l2_getf(F), l2_getr(R),
+    not( (member(X, AAA), member(Y, AAA), 
+        member( (Y, FY), F), member( (FY, FFY), F), member( (X, FX), F),
+        member( (X, FY), R), not(not( member( (FX, FFY), R))), write(X), nl, write(Y) ) ).
